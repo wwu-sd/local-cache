@@ -3956,6 +3956,16 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(963));
 const p = __importStar(__nccwpck_require__(17));
 const cache_1 = __nccwpck_require__(400);
+function removeLastElementFromPath(path) {
+    var delimiterIndex = path.lastIndexOf('/');
+    if (delimiterIndex === -1) {
+      // If the path does not contain any delimiter, return an empty string or handle it according to your requirements.
+      return '';
+    }
+    // Extract the path without the last element by using the `slice` method.
+    var newPath = path.slice(0, delimiterIndex);
+    return newPath;
+  }
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -3976,7 +3986,7 @@ function run() {
             core.saveState('cache-hit', String(cacheHit));
             core.setOutput('cache-hit', String(cacheHit));
             if (cacheHit === true) {
-                const ln = yield (0, cache_1.exec)(`ln -s ${p.join(cachePath, path.split('/').slice(-1)[0])} ${path.slice(0, -1).join('/')}`);
+                const ln = yield (0, cache_1.exec)(`ln -s ${p.join(cachePath, path.split('/').slice(-1)[0])} ${removeLastElementFromPath(path)}`);
                 core.debug(ln.stdout);
                 if (ln.stderr)
                     core.error(ln.stderr);
